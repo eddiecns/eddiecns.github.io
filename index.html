@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edmore Waruma — DevSecOps & Cloud Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0e0e0e;
+      --bg2:     #161616;
+      --bg3:     #1c1c1c;
+      --border:  #2a2a2a;
+      --border2: #333;
+      --accent:  #5b9cf6;
+      --green:   #3ecf8e;
+      --orange:  #e8845a;
+      --text:    #efefef;
+      --muted:   #787878;
+      --sub:     #aaa;
+      --mono:    'IBM Plex Mono', monospace;
+      --sans:    'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(14,14,14,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px;
+    }
+    .nav-name {
+      font-family: var(--mono);
+      font-size: 13px; font-weight: 500;
+      color: var(--text); letter-spacing: 0.02em;
+    }
+    .nav-name span { color: var(--accent); }
+    .nav-links {
+      display: flex; gap: 28px; list-style: none;
+    }
+    .nav-links a {
+      font-size: 13px; color: var(--muted);
+      transition: color 0.15s; font-weight: 400;
+      letter-spacing: 0.01em;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--text); }
+
+    /* hamburger */
+    .nav-hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+    .nav-hamburger span {
+      display: block; width: 22px; height: 1.5px;
+      background: var(--muted); transition: all 0.25s;
+      transform-origin: center;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); background: var(--text); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); background: var(--text); }
+
+    .mobile-menu {
+      display: none; position: fixed;
+      top: 58px; left: 0; right: 0;
+      background: rgba(14,14,14,0.98);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 40px 28px;
+      flex-direction: column; gap: 20px;
+      z-index: 99;
+    }
+    .mobile-menu a {
+      font-size: 16px; color: var(--muted);
+      font-weight: 400; transition: color 0.15s;
+    }
+    .mobile-menu a:hover { color: var(--text); }
+    .mobile-menu.open { display: flex; }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 780px; margin: 0 auto; padding: 0 28px; }
+    .section-divider { border: none; border-top: 1px solid var(--border); margin: 80px 0; }
+    .section-label {
+      font-family: var(--mono); font-size: 11px; font-weight: 500;
+      color: var(--accent); letter-spacing: 0.1em;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: 24px; font-weight: 600;
+      color: var(--text); letter-spacing: -0.02em;
+      margin-bottom: 36px; line-height: 1.2;
+    }
+
+    /* ── HERO ── */
+    #hero { padding: 88px 0 76px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--mono); font-size: 11px;
+      color: var(--green); letter-spacing: 0.06em;
+      background: rgba(62,207,142,0.08);
+      border: 1px solid rgba(62,207,142,0.18);
+      padding: 5px 14px; border-radius: 100px;
+      margin-bottom: 30px;
+    }
+    .hero-badge::before {
+      content: ''; width: 6px; height: 6px;
+      background: var(--green); border-radius: 50%;
+      animation: blink 2s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .hero-name {
+      font-size: clamp(38px, 7vw, 58px);
+      font-weight: 600; letter-spacing: -0.03em;
+      line-height: 1.05; color: #fff; margin-bottom: 14px;
+    }
+    .hero-title {
+      font-size: 16px; color: var(--muted);
+      margin-bottom: 22px; font-weight: 300;
+      letter-spacing: 0.01em;
+    }
+    .hero-title em { color: var(--accent); font-style: normal; font-weight: 400; }
+    .hero-bio {
+      font-size: 15px; color: var(--sub);
+      max-width: 560px; line-height: 1.8;
+      margin-bottom: 36px; font-weight: 300;
+    }
+    .hero-path {
+      font-family: var(--mono); font-size: 12px;
+      color: var(--muted); margin-top: 6px;
+    }
+    .hero-path span { color: var(--text); }
+    .hero-links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 36px; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 20px; font-size: 13px; font-weight: 500;
+      border-radius: 7px; transition: all 0.15s;
+      letter-spacing: 0.01em; cursor: pointer; font-family: var(--sans);
+    }
+    .btn-solid {
+      background: var(--accent); color: #000; border: 1px solid var(--accent);
+    }
+    .btn-solid:hover { background: #79b0ff; border-color: #79b0ff; }
+    .btn-ghost {
+      background: transparent; color: var(--sub);
+      border: 1px solid var(--border2);
+    }
+    .btn-ghost:hover { border-color: #555; color: var(--text); }
+
+    /* ── ABOUT ── */
+    .about-text {
+      color: var(--sub); line-height: 1.85; font-weight: 300;
+      display: flex; flex-direction: column; gap: 16px;
+      margin-bottom: 44px;
+    }
+    .about-text strong { color: var(--text); font-weight: 500; }
+    .about-text a { color: var(--accent); }
+
+    .journey-heading {
+      font-family: var(--mono); font-size: 11px; font-weight: 500;
+      color: var(--muted); text-transform: uppercase;
+      letter-spacing: 0.09em; margin-bottom: 14px;
+    }
+    .journey-item {
+      display: flex; gap: 16px; padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .journey-item:last-child { border-bottom: none; }
+    .j-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--border2); flex-shrink: 0; margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .journey-item:hover .j-dot { background: var(--accent); }
+    .j-role { font-size: 14px; font-weight: 500; color: var(--text); }
+    .j-meta {
+      font-family: var(--mono); font-size: 11px;
+      color: var(--accent); margin-top: 3px;
+    }
+    .j-desc { font-size: 13px; color: var(--muted); margin-top: 5px; line-height: 1.55; }
+
+    /* ── SKILLS ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 10px;
+    }
+    .skill-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 9px; padding: 18px 20px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .skill-card:hover { border-color: var(--border2); background: var(--bg3); }
+    .skill-icon { font-size: 18px; margin-bottom: 10px; }
+    .skill-name {
+      font-size: 12px; font-weight: 600; color: var(--text);
+      letter-spacing: 0.02em; margin-bottom: 10px; text-transform: uppercase;
+      font-family: var(--mono);
+    }
+    .stags { display: flex; flex-wrap: wrap; gap: 5px; }
+    .stag {
+      font-family: var(--mono); font-size: 10px;
+      color: var(--muted); background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border); padding: 2px 7px; border-radius: 4px;
+    }
+
+    /* ── PROJECTS ── */
+    .projects-list { display: flex; flex-direction: column; gap: 10px; }
+    .pcard {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 9px; padding: 26px 28px;
+      transition: border-color 0.2s;
+    }
+    .pcard:hover { border-color: var(--border2); }
+    .pcard.featured { border-color: rgba(91,156,246,0.2); }
+    .pcard.featured:hover { border-color: rgba(91,156,246,0.45); }
+
+    .phead {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 16px;
+      margin-bottom: 14px;
+    }
+    .pnum {
+      font-family: var(--mono); font-size: 10px;
+      color: var(--muted); margin-bottom: 5px;
+    }
+    .pname {
+      font-size: 16px; font-weight: 600; color: var(--text); line-height: 1.3;
+    }
+    .pname a { transition: color 0.15s; }
+    .pname a:hover { color: var(--accent); }
+    .pbadge {
+      font-family: var(--mono); font-size: 10px; font-weight: 500;
+      color: var(--accent); border: 1px solid rgba(91,156,246,0.3);
+      padding: 3px 9px; border-radius: 4px; white-space: nowrap;
+      flex-shrink: 0; margin-top: 2px; letter-spacing: 0.04em;
+    }
+    .pdesc {
+      font-size: 13.5px; color: var(--sub); line-height: 1.8;
+      margin-bottom: 18px; font-weight: 300;
+    }
+    .pstats {
+      display: flex; gap: 30px; margin-bottom: 18px;
+      padding: 16px 18px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border); border-radius: 7px;
+    }
+    .stat-num {
+      font-family: var(--mono); font-size: 20px; font-weight: 500;
+      color: var(--accent); display: block; line-height: 1.1;
+    }
+    .stat-lbl {
+      font-size: 11px; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.06em; margin-top: 3px;
+    }
+    .ttags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+    .ttag {
+      font-family: var(--mono); font-size: 10px; font-weight: 500;
+      color: var(--accent); background: rgba(91,156,246,0.07);
+      border: 1px solid rgba(91,156,246,0.18); padding: 3px 9px; border-radius: 4px;
+    }
+    .plinks { display: flex; gap: 18px; }
+    .plink {
+      font-family: var(--mono); font-size: 12px;
+      color: var(--muted); transition: color 0.15s;
+    }
+    .plink:hover { color: var(--text); }
+
+    /* VM TABLE */
+    .vm-wrap {
+      margin: 14px 0 18px; border: 1px solid var(--border);
+      border-radius: 7px; overflow: hidden;
+    }
+    .vm-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    .vm-table th {
+      text-align: left; padding: 9px 12px;
+      color: var(--muted); font-weight: 500;
+      font-family: var(--mono); font-size: 10px;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid var(--border);
+    }
+    .vm-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); color: var(--sub); }
+    .vm-table tr:last-child td { border-bottom: none; }
+    .vm-table td:first-child { color: var(--text); font-weight: 500; }
+    .vm-table td:nth-child(2) { color: var(--green); font-family: var(--mono); font-size: 11px; }
+
+    /* ── EXPERIENCE ── */
+    .exp-item {
+      display: grid; grid-template-columns: 110px 1fr;
+      gap: 24px; padding: 22px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .exp-item:last-child { border-bottom: none; }
+    .exp-date {
+      font-family: var(--mono); font-size: 11px;
+      color: var(--muted); padding-top: 3px; line-height: 1.5;
+    }
+    .exp-role { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .exp-co { font-size: 13px; color: var(--accent); margin-bottom: 7px; font-weight: 400; }
+    .exp-desc { font-size: 13px; color: var(--sub); line-height: 1.7; font-weight: 300; }
+
+    /* ── CONTACT ── */
+    #contact { padding-bottom: 96px; }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 48px; align-items: start;
+    }
+    .contact-head {
+      font-size: 22px; font-weight: 600; color: var(--text);
+      letter-spacing: -0.02em; margin-bottom: 12px; line-height: 1.3;
+    }
+    .contact-sub {
+      font-size: 14px; color: var(--sub); line-height: 1.75;
+      margin-bottom: 24px; font-weight: 300;
+    }
+    .clinks { display: flex; flex-direction: column; gap: 8px; }
+    .clink {
+      display: flex; align-items: center; gap: 14px;
+      padding: 13px 16px; background: var(--bg2);
+      border: 1px solid var(--border); border-radius: 8px;
+      transition: border-color 0.15s;
+    }
+    .clink:hover { border-color: var(--border2); }
+    .cicon {
+      width: 32px; height: 32px; flex-shrink: 0;
+      background: rgba(255,255,255,0.04); border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-family: var(--mono);
+      color: var(--sub); border: 1px solid var(--border);
+    }
+    .clabel { font-size: 13px; font-weight: 500; color: var(--text); }
+    .cval { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 26px 0; text-align: center;
+    }
+    .footer-inner {
+      font-family: var(--mono); font-size: 11.5px;
+      color: var(--muted); letter-spacing: 0.02em;
+    }
+    .footer-inner span { color: var(--sub); }
+
+    /* ── REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(18px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 680px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .mobile-menu { padding: 24px 20px 28px; }
+      .container { padding: 0 20px; }
+      #hero { padding: 60px 0 52px; }
+      .section-divider { margin: 56px 0; }
+      .contact-grid { grid-template-columns: 1fr; gap: 32px; }
+      .exp-item { grid-template-columns: 1fr; gap: 4px; }
+      .pstats { gap: 20px; flex-wrap: wrap; }
+      .vm-table td, .vm-table th { padding: 7px 10px; }
+      .phead { flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-name">EW<span>_</span>PORTFOLIO</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMobileMenu()">About</a>
+  <a href="#skills" onclick="closeMobileMenu()">Skills</a>
+  <a href="#projects" onclick="closeMobileMenu()">Projects</a>
+  <a href="#experience" onclick="closeMobileMenu()">Experience</a>
+  <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-badge">Building in DevSecOps &amp; Cloud</div>
+    <h1 class="hero-name">Edmore Waruma</h1>
+    <p class="hero-title"><em>DevSecOps</em> · Cloud Engineer · Aspiring Consultant</p>
+    <p class="hero-bio">
+      Building cloud-native infrastructure and automated pipelines on Azure and bare-metal Proxmox.
+    </p>
+    <p class="hero-path">
+      <span>Electronics</span> → <span>Networking</span> → <span>IT</span> → <span>SysAdmin</span> → <span>Dev</span> → <span>DevOps</span>
+    </p>
+    <div class="hero-links">
+      <a href="#projects" class="btn btn-solid">View Projects</a>
+      <a href="https://github.com/eddiecns" target="_blank" rel="noopener" class="btn btn-ghost">GitHub ↗</a>
+      <a href="https://www.linkedin.com/in/edwaruma/" target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <hr class="section-divider">
+    <div class="section-label">01 — About</div>
+    <h2 class="section-title">The journey shapes the engineer.</h2>
+    <div class="about-text reveal">
+      <p>I'm a <strong>Junior Software Developer</strong> with a BSc IT, building expertise in DevOps and Cloud Security with the goal of moving into <strong>technical consultancy</strong>.</p>
+      <p>What makes my background different is the path I took — I've worked at every layer of the stack, from <strong>soldering circuits</strong> to configuring networks, supporting systems, and now deploying cloud infrastructure. When a Kubernetes pod fails due to CPU constraints, I understand it at the <strong>infrastructure level</strong>, not just the YAML level.</p>
+      <p>Currently focused on <strong>Azure, Kubernetes, CI/CD pipelines, and DevSecOps</strong> — with Terraform and cloud security deepening as I go.</p>
+    </div>
+    <div class="reveal">
+      <div class="journey-heading">Career path</div>
+      <div class="journey-item">
+        <div class="j-dot"></div>
+        <div>
+          <div class="j-role">Junior Software Developer</div>
+          <div class="j-meta">Current — Pivoting to DevOps</div>
+          <div class="j-desc">Building software while upskilling in cloud infrastructure, CI/CD, and Kubernetes.</div>
+        </div>
+      </div>
+      <div class="journey-item">
+        <div class="j-dot"></div>
+        <div>
+          <div class="j-role">System Administrator</div>
+          <div class="j-meta">Previous</div>
+          <div class="j-desc">Servers, Active Directory, backups, uptime, patch management.</div>
+        </div>
+      </div>
+      <div class="journey-item">
+        <div class="j-dot"></div>
+        <div>
+          <div class="j-role">IT &amp; Network Technician</div>
+          <div class="j-meta">Previous</div>
+          <div class="j-desc">Switches, routers, firewalls, hardware and software support.</div>
+        </div>
+      </div>
+      <div class="journey-item">
+        <div class="j-dot"></div>
+        <div>
+          <div class="j-role">Electronics Technician</div>
+          <div class="j-meta">Foundation</div>
+          <div class="j-desc">Where it started — understanding systems from the ground up.</div>
+        </div>
+      </div>
+      <div class="journey-item">
+        <div class="j-dot"></div>
+        <div>
+          <div class="j-role">BSc Information Technology</div>
+          <div class="j-meta">Education</div>
+          <div class="j-desc">Graduated with hands-on projects including a full-stack Django bakery platform.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <hr class="section-divider">
+    <div class="section-label">02 — Skills</div>
+    <h2 class="section-title">Tools &amp; Technologies</h2>
+    <div class="skills-grid">
+      <div class="skill-card reveal">
+        <div class="skill-icon">☁️</div>
+        <div class="skill-name">Cloud &amp; Infra</div>
+        <div class="stags">
+          <span class="stag">Microsoft Azure</span><span class="stag">AKS</span><span class="stag">ACR</span>
+          <span class="stag">Azure VM</span><span class="stag">Azure CLI</span><span class="stag">Load Balancer</span><span class="stag">Managed Disks</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">⚙️</div>
+        <div class="skill-name">CI/CD &amp; Automation</div>
+        <div class="stags">
+          <span class="stag">Jenkins</span><span class="stag">Ansible</span><span class="stag">GitHub Actions</span>
+          <span class="stag">Webhooks</span><span class="stag">Shell Scripting</span><span class="stag">Groovy</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">🐳</div>
+        <div class="skill-name">Containers &amp; K8s</div>
+        <div class="stags">
+          <span class="stag">Docker</span><span class="stag">Kubernetes</span><span class="stag">kubectl</span>
+          <span class="stag">StatefulSets</span><span class="stag">Init Containers</span><span class="stag">PVC / PV</span>
+          <span class="stag">ConfigMaps</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">🐍</div>
+        <div class="skill-name">Development</div>
+        <div class="stags">
+          <span class="stag">Python</span><span class="stag">Django</span><span class="stag">MySQL</span>
+          <span class="stag">REST APIs</span><span class="stag">Gunicorn</span><span class="stag">Nginx</span><span class="stag">Stripe API</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">🔐</div>
+        <div class="skill-name">Security</div>
+        <div class="stags">
+          <span class="stag">K8s Secrets</span><span class="stag">Service Principals</span><span class="stag">RBAC</span>
+          <span class="stag">Managed Identity</span><span class="stag">Secret Rotation</span><span class="stag">TLS (learning)</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">🖥️</div>
+        <div class="skill-name">Homelab &amp; IaC</div>
+        <div class="stags">
+          <span class="stag">Proxmox VE</span><span class="stag">Terraform</span><span class="stag">cloud-init</span>
+          <span class="stag">kubeadm</span><span class="stag">Rocky Linux 9</span><span class="stag">GitLab CE</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">📊</div>
+        <div class="skill-name">Monitoring</div>
+        <div class="stags">
+          <span class="stag">Prometheus</span><span class="stag">Grafana</span><span class="stag">Node Exporter</span>
+          <span class="stag">cAdvisor</span><span class="stag">kube-state-metrics</span>
+        </div>
+      </div>
+      <div class="skill-card reveal">
+        <div class="skill-icon">🌐</div>
+        <div class="skill-name">Networking &amp; OS</div>
+        <div class="stags">
+          <span class="stag">Linux (Ubuntu)</span><span class="stag">TCP/IP</span><span class="stag">DNS</span>
+          <span class="stag">VNet / Subnets</span><span class="stag">NSG</span><span class="stag">SSH</span><span class="stag">systemd</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <hr class="section-divider">
+    <div class="section-label">03 — Projects</div>
+    <h2 class="section-title">Things I've built</h2>
+    <div class="projects-list">
+
+      <!-- 001 -->
+      <div class="pcard featured reveal">
+        <div class="phead">
+          <div>
+            <div class="pnum">001</div>
+            <div class="pname"><a href="https://github.com/eddiecns/azure-devops-pipeline" target="_blank" rel="noopener">End-to-End DevOps Pipeline on Azure ↗</a></div>
+          </div>
+          <span class="pbadge">Featured</span>
+        </div>
+        <p class="pdesc">Fully automated CI/CD pipeline from git push to live URL on AKS in under 90 seconds. Jenkins orchestrates the CD, Ansible manages Kubernetes deployments, Docker images pushed to ACR. MySQL StatefulSet on Azure managed disk, Nginx sidecar for static/media, Stripe payments, and init containers handling DB migrations on every deploy.</p>
+        <div class="pstats">
+          <div><span class="stat-num">19</span><span class="stat-lbl">Azure Resources</span></div>
+          <div><span class="stat-num">~90s</span><span class="stat-lbl">Deploy Time</span></div>
+          <div><span class="stat-num">6</span><span class="stat-lbl">Pipeline Stages</span></div>
+        </div>
+        <div class="ttags">
+          <span class="ttag">Azure AKS</span><span class="ttag">Jenkins</span><span class="ttag">Ansible</span>
+          <span class="ttag">Docker</span><span class="ttag">Kubernetes</span><span class="ttag">Django</span>
+          <span class="ttag">MySQL</span><span class="ttag">Nginx</span><span class="ttag">ACR</span><span class="ttag">Stripe</span>
+        </div>
+        <div class="plinks">
+          <a href="https://github.com/eddiecns/azure-devops-pipeline" target="_blank" rel="noopener" class="plink">↗ GitHub</a>
+          <a href="http://135.222.240.34" target="_blank" rel="noopener" class="plink">↗ Live Demo</a>
+        </div>
+      </div>
+
+      <!-- 002 -->
+      <div class="pcard featured reveal">
+        <div class="phead">
+          <div>
+            <div class="pnum">002</div>
+            <div class="pname"><a href="https://github.com/eddiecns" target="_blank" rel="noopener">Home Lab — Full DevOps Pipeline on Proxmox ↗</a></div>
+          </div>
+          <span class="pbadge">Featured</span>
+        </div>
+        <p class="pdesc">7-stage CI/CD pipeline built from bare metal on a repurposed HP desktop — no cloud, no managed services. Terraform (Telmate) provisions VMs from a Rocky Linux 9 cloud-init golden template on Proxmox. Ansible hardens SSH and configures every node. GitLab webhooks to Jenkins for CI: ephemeral MySQL, migrations, tests, docker save to .tar, distributed via Ansible LXC to a 4-node kubeadm cluster. Prometheus + Grafana monitor everything on a dedicated VM.</p>
+        <div class="pstats">
+          <div><span class="stat-num">8</span><span class="stat-lbl">VMs / LXCs</span></div>
+          <div><span class="stat-num">7</span><span class="stat-lbl">Stages</span></div>
+          <div><span class="stat-num">100%</span><span class="stat-lbl">Self-Hosted</span></div>
+        </div>
+        <div class="vm-wrap">
+          <table class="vm-table">
+            <thead>
+              <tr><th>Node</th><th>Role</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Ansible LXC (pct 101)</td><td>DevOps control node — image distribution</td></tr>
+              <tr><td>GitLab VM</td><td>Source control + webhook triggers</td></tr>
+              <tr><td>Jenkins VM</td><td>CI — build, test, Docker image export</td></tr>
+              <tr><td>Monitoring VM</td><td>Prometheus :9090 · Grafana :3000</td></tr>
+              <tr><td>K8s Master</td><td>Cluster control plane</td></tr>
+              <tr><td>K8s Worker 1</td><td>Django + Gunicorn + Nginx</td></tr>
+              <tr><td>K8s Worker 2</td><td>Django + Gunicorn + Nginx</td></tr>
+              <tr><td>K8s Worker 3</td><td>MySQL database node</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ttags">
+          <span class="ttag">Proxmox VE</span><span class="ttag">Terraform</span><span class="ttag">Ansible</span>
+          <span class="ttag">Rocky Linux 9</span><span class="ttag">GitLab CE</span><span class="ttag">Jenkins</span>
+          <span class="ttag">Kubernetes</span><span class="ttag">Flannel</span><span class="ttag">Prometheus</span><span class="ttag">Grafana</span>
+        </div>
+        <div class="plinks">
+          <a href="https://github.com/eddiecns" target="_blank" rel="noopener" class="plink">↗ GitHub</a>
+        </div>
+      </div>
+
+      <!-- 003 -->
+      <div class="pcard reveal">
+        <div class="pnum">003</div>
+        <div class="pname" style="margin-bottom:12px;">Nyarie's Bakery — University SaaS Platform</div>
+        <p class="pdesc">Final year BSc IT project. Multi-tenant Django platform where bakers rent an online storefront. Product catalogues, user auth, admin dashboard, media uploads with persistent storage, and Stripe payments. Later used as the application running inside the Azure AKS pipeline above.</p>
+        <div class="ttags">
+          <span class="ttag">Django</span><span class="ttag">Python</span><span class="ttag">MySQL</span>
+          <span class="ttag">Stripe</span><span class="ttag">Gunicorn</span><span class="ttag">Nginx</span>
+        </div>
+        <div class="plinks"><a href="https://github.com/eddiecns" target="_blank" rel="noopener" class="plink">↗ GitHub</a></div>
+      </div>
+
+      <!-- 004 -->
+      <div class="pcard reveal">
+        <div class="pnum">004</div>
+        <div class="pname" style="margin-bottom:12px;">Restaurant POS System</div>
+        <p class="pdesc">Full-featured Point of Sale system for restaurants — touch-friendly, responsive, modular. Role-based access for Admin, Manager, and Cashier. Full order lifecycle: table management, menu CRUD, billing, receipt printing, and sales reporting. Modular architecture allows adding inventory, KDS, and payment integrations without refactoring core logic.</p>
+        <div class="ttags">
+          <span class="ttag">React / Vue</span><span class="ttag">Tailwind CSS</span><span class="ttag">Node.js</span>
+          <span class="ttag">PostgreSQL</span><span class="ttag">JWT Auth</span><span class="ttag">ESC/POS</span>
+        </div>
+        <div class="plinks"><a href="https://github.com/eddiecns" target="_blank" rel="noopener" class="plink">↗ GitHub</a></div>
+      </div>
+
+      <!-- 005 -->
+      <div class="pcard reveal">
+        <div class="pnum">005</div>
+        <div class="pname" style="margin-bottom:12px;">Student Grade Calculator — Android</div>
+        <p class="pdesc">Android digital gradebook for teachers built in Android Studio with Java. Calculates GPA using the weighted formula, classifies students A–F. SQLite database with relational tables, search by name or ID, class-level statistics (average, highest/lowest GPA, grade distribution) via AlertDialogs.</p>
+        <div class="ttags">
+          <span class="ttag">Android Studio</span><span class="ttag">Java</span><span class="ttag">SQLite</span><span class="ttag">GPA Algorithm</span>
+        </div>
+        <div class="plinks"><a href="https://github.com/eddiecns" target="_blank" rel="noopener" class="plink">↗ GitHub</a></div>
+      </div>
+
+      <!-- 006 -->
+      <div class="pcard reveal">
+        <div class="pnum">006</div>
+        <div class="pname" style="margin-bottom:12px;">Business Inventory Management — Android</div>
+        <p class="pdesc">Comprehensive Android inventory and sales management system. Dashboard, Inventory, Sales, and Reports screens via bottom navigation. Full CRUD on Products and Sales, real-time stock updates on transactions, low-stock alert notifications, RecyclerView with custom adapters, CSV export, and daily/weekly reports with profit margins.</p>
+        <div class="ttags">
+          <span class="ttag">Android Studio</span><span class="ttag">Java</span><span class="ttag">SQLite</span>
+          <span class="ttag">RecyclerView</span><span class="ttag">CSV Export</span><span class="ttag">Notifications</span>
+        </div>
+        <div class="plinks"><a href="https://github.com/eddiecns" target="_blank" rel="noopener" class="plink">↗ GitHub</a></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <hr class="section-divider">
+    <div class="section-label">04 — Experience</div>
+    <h2 class="section-title">Where I've been</h2>
+    <div class="reveal">
+      <div class="exp-item">
+        <div class="exp-date">Current</div>
+        <div>
+          <div class="exp-role">Junior Software Developer</div>
+          <div class="exp-co">Currently Employed</div>
+          <div class="exp-desc">Building software products while self-directing a transition into DevOps and cloud infrastructure — hands-on Azure and Kubernetes projects outside of work hours.</div>
+        </div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-date">Previous</div>
+        <div>
+          <div class="exp-role">System Administrator</div>
+          <div class="exp-co">IT Infrastructure</div>
+          <div class="exp-desc">Managed server infrastructure, user accounts, Active Directory, backups, and system monitoring. Responsible for uptime and patch management.</div>
+        </div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-date">Previous</div>
+        <div>
+          <div class="exp-role">IT &amp; Network Technician</div>
+          <div class="exp-co">Networking &amp; Support</div>
+          <div class="exp-desc">Configured and maintained switches, routers, and firewalls. Hardware and software support across the organisation.</div>
+        </div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-date">Foundation</div>
+        <div>
+          <div class="exp-role">Electronics Technician</div>
+          <div class="exp-co">Electronics &amp; Hardware</div>
+          <div class="exp-desc">Fault-finding, circuit repair, hardware maintenance. The low-level foundation that underpins everything since.</div>
+        </div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-date">Education</div>
+        <div>
+          <div class="exp-role">BSc Information Technology</div>
+          <div class="exp-co">University</div>
+          <div class="exp-desc">Graduated with BSc IT. Final year project: multi-tenant Django bakery SaaS — later deployed in the Azure AKS pipeline.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <hr class="section-divider">
+    <div class="section-label">05 — Contact</div>
+    <h2 class="section-title">Let's talk</h2>
+    <div class="contact-grid reveal">
+      <div>
+        <p class="contact-head">Open to DevSecOps &amp; Cloud roles.</p>
+        <p class="contact-sub">Especially interested in consultancy-track positions where I can keep learning across different environments and stacks.</p>
+        <a href="mailto:edwaruma@gmail.com" class="btn btn-solid">Send an Email</a>
+      </div>
+      <div class="clinks">
+        <a href="mailto:edwaruma@gmail.com" class="clink">
+          <div class="cicon">✉</div>
+          <div>
+            <div class="clabel">Email</div>
+            <div class="cval">edwaruma@gmail.com</div>
+          </div>
+        </a>
+        <a href="https://www.linkedin.com/in/edwaruma/" target="_blank" rel="noopener" class="clink">
+          <div class="cicon">in</div>
+          <div>
+            <div class="clabel">LinkedIn</div>
+            <div class="cval">linkedin.com/in/edwaruma</div>
+          </div>
+        </a>
+        <a href="https://github.com/eddiecns" target="_blank" rel="noopener" class="clink">
+          <div class="cicon">gh</div>
+          <div>
+            <div class="clabel">GitHub</div>
+            <div class="cval">github.com/eddiecns</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">© 2026 <span>Edmore Waruma</span> · DevSecOps &amp; Cloud Engineer · Hosted on GitHub Pages</div>
+  </div>
+</footer>
+
+<script>
+  // ── HAMBURGER MENU ──────────────────────────────────────────
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen);
+  });
+
+  function closeMobileMenu() {
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+  }
+
+  // Close on outside click
+  document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+      closeMobileMenu();
+    }
+  });
+
+  // ── SCROLL REVEAL ───────────────────────────────────────────
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => revealObserver.observe(el));
+
+  // ── ACTIVE NAV HIGHLIGHT ────────────────────────────────────
+  const sections = document.querySelectorAll('section[id]');
+  const navAnchors = document.querySelectorAll('.nav-links a');
+
+  const navObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navAnchors.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
+        });
+      }
+    });
+  }, {
+    rootMargin: '-30% 0px -65% 0px',
+    threshold: 0
+  });
+
+  sections.forEach(s => navObserver.observe(s));
+</script>
+</body>
+</html>
